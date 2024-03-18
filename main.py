@@ -72,7 +72,7 @@ with FaceDetector.create_from_options(options) as detector:
     elif(args.mode in ['live']):
         cap = cv2.VideoCapture(0)
         ret, frame = cap.read()
-        
+        #This part does not work right now, the detectAsync method does not return anything
         def getLiveResult(result, output_image: mp.Image, timestamp_ms: int):
             print('detection result: {}',result)
         
