@@ -9,6 +9,7 @@ from mediapipe.python._framework_bindings.timestamp import Timestamp
 from util import FaceDetector,imageOptions, videoOptions, liveOptions
 
 
+
 def processImage(image, result):
     imageCopy = np.copy(image.numpy_view())
 
@@ -21,7 +22,7 @@ def processImage(image, result):
     return imageCopy
 
 args = argparse.ArgumentParser()
-args.add_argument("--mode", default="video")
+args.add_argument("--mode", default="live")
 args.add_argument("--filepath",default="./data/sample.mp4")
 args = args.parse_args()
 
@@ -53,7 +54,6 @@ with FaceDetector.create_from_options(options) as detector:
         outputVideo = cv2.VideoWriter(os.path.join('.','data','output.mp4'), 
                             cv2.VideoWriter_fourcc(*'avc1'), 25,
                             (frame.shape[1],frame.shape[0]))
-
         while ret:
             #converting the frame to an mpImage in RGB format
             mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
@@ -68,3 +68,24 @@ with FaceDetector.create_from_options(options) as detector:
                 
         capture.release()
         outputVideo.release()
+
+    elif(args.mode in ['live']):
+        cap = cv2.VideoCapture(0)
+        ret, frame = cap.read()
+        
+        def getLiveResult(result, output_image: mp.Image, timestamp_ms: int):
+            print('detection result: {}',result)
+        
+        frame = np.asarray(frame)
+        while(ret):
+            frame = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
+
+            faceDetectorResult = detector.detect_async(frame, Timestamp.from_seconds(time.time()).value)
+
+            processedFrame = processImage(frame,faceDetectorResult)
+
+            cv2.imshow("Frame",frame)
+            cv2.waitKey(25)
+
+            ret, frame = cap.read()
+        cap.release()
