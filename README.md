@@ -1,7 +1,7 @@
 # Face Anonymizer Computer Vision Project
 
 ## Overview
-This project aims to provide a solution for anonymizing faces in images using computer vision techniques. The anonymization process involves detecting and replacing facial features with blurred or pixelated regions, ensuring privacy protection while maintaining the overall context of the image.
+This project aims to provide a solution for anonymizing faces in images using computer vision techniques. The anonymization process involves detecting and replacing facial features with blurred or pixelated regions, ensuring privacy protection while maintaining the overall context of images, videos and livestreaming cameras as well.
 
 ## Features
 - **Face Detection**: Utilizes state-of-the-art face detection algorithms to accurately locate faces within an image.
