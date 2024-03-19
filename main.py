@@ -9,7 +9,6 @@ from mediapipe.python._framework_bindings.timestamp import Timestamp
 from util import FaceDetector,imageOptions, videoOptions, liveOptions
 
 
-
 def processImage(image, result):
     imageCopy = np.copy(image.numpy_view())
 
@@ -33,7 +32,7 @@ if(args.mode in ['image']):
 elif(args.mode in ['video']):
     options = videoOptions
 elif(args.mode in ['live']):
-    options = liveOptions
+    options = videoOptions
 
 with FaceDetector.create_from_options(options) as detector:
     if(args.mode in ['image']):
@@ -70,18 +69,14 @@ with FaceDetector.create_from_options(options) as detector:
         outputVideo.release()
 
     elif(args.mode in ['live']):
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(1)
         ret, frame = cap.read()
-        #This part does not work right now, the detectAsync method does not return anything
-        def getLiveResult(result, output_image: mp.Image, timestamp_ms: int):
-            print('detection result: {}',result)
-        
         frame = np.asarray(frame)
+        
         while(ret):
             frame = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
 
-            faceDetectorResult = detector.detect_async(frame, Timestamp.from_seconds(time.time()).value)
-
+            faceDetectorResult = detector.detect_for_video(frame, Timestamp.from_seconds(time.time()).value)
             processedFrame = processImage(frame,faceDetectorResult)
 
             cv2.imshow("Frame",frame)

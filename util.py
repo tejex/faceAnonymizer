@@ -1,6 +1,4 @@
-from main import getLiveResult
 import mediapipe as mp
-
 
 modelPath = '/Users/bamlakdeju/Desktop/ML/faceAnonymizer/blaze_face_short_range.tflite'
 imagePath = './data/face.jpeg'
@@ -20,6 +18,9 @@ videoOptions = FaceDetectorOptions(
     base_options=BaseOptions(model_asset_path=modelPath),
     running_mode=VisionRunningMode.VIDEO
 )
+
+def getLiveResult(result:mp.DetectionResult, output_image: mp.Image, timestamp_ms: int):
+    print('detection result: {}'.format(result))
 
 liveOptions = FaceDetectorOptions(
     base_options=BaseOptions(model_asset_path=modelPath),
